@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order processing visualization</title>
+
+  <link type="text/css" rel="stylesheet" href="style.css" />
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  <script type="text/javascript" src="order_processing.js"></script>
+
+</head>
+<body>
+  
+  <div class="content">
+    <div class="time">
+      <canvas width="35" height="600" class="time"></canvas>
+    </div>
+
+    <div class="orders">
+      <canvas width="800" height="600" class="orders"></canvas>
+    </div>
+  </div>
+
+<script type="text/javascript">
+$(function () {
+
+  var json = '[\
+    {"orderId": 1, "packingStart": 0, "duration": 160},\
+    {"orderId": 2, "packingStart": 510, "duration": 90},\
+    {"orderId": 3, "packingStart": 270, "duration": 128},\
+    {"orderId": 4, "packingStart": 320, "duration": 22},\
+    {"orderId": 5, "packingStart": 80, "duration": 53},\
+    {"orderId": 6, "packingStart": 316, "duration": 83},\
+    {"orderId": 7, "packingStart": 220, "duration": 44},\
+    {"orderId": 8, "packingStart": 341, "duration": 39},\
+    {"orderId": 9, "packingStart": 291, "duration": 73}\
+  ]';
+
+  var orders = JSON.parse(json);
+
+  // process adds width, left and height
+  var ordersCanvas = OrderProcessing.process(orders);
+  console.log(ordersCanvas);
+
+  // time canvas
+  var ctx = $('canvas.time').get(0).getContext('2d');
+  for (var i = 0; i < 11; i++) {
+    ctx.fillStyle = 'black';
+    ctx.font = '14px Arial';
+ 
+    var yCoord = i * 60;
+    yCoord = ((yCoord == 0) ? 10 : yCoord); // offset for 0:00
+
+    ctx.fillText(i + ':00', 0, yCoord);
+  }
+
+  // orders canvas
+  var ctx = $('canvas.orders').get(0).getContext('2d');
+  for (var i = 0; i < ordersCanvas.length; i++) {
+    var order = ordersCanvas[i];
+
+    // main white box
+    ctx.fillStyle = 'white';
+    ctx.fillRect(order.left, order.packingStart, order.width, order.height);
+
+    // full border
+    ctx.strokeStyle = '#009e08';
+    ctx.strokeRect(order.left + 1, order.packingStart + 1, order.width - 2, order.height - 2);
+
+    // left and right border
+    // ctx.strokeRect(order.left, order.packingStart, 1, order.height);
+    // ctx.strokeRect(order.left + order.width - 1, order.packingStart, 1, order.height);    
+
+    // order number
+    ctx.fillStyle = 'black';
+    ctx.font = '14px Arial';
+    ctx.fillText('#' + order.orderId, order.left + 5, order.packingStart + 15);
+
+  }
+});
+</script>
+
+</body>
+</html>

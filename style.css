@@ -1,0 +1,25 @@
+.content {
+  width: 930px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+div.time {
+  padding: 10px;
+  float: left;
+}
+
+canvas.time {
+  background: white;
+}
+
+div.orders {
+  padding: 10px;
+  background: #e5ffe4; 
+  float: left;
+}
+
+canvas.orders {
+  background: #e5ffe4;
+}
+
