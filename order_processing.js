@@ -22,33 +22,38 @@ var OrderProcessing = (function () {
   }
 
   // group orders by overlap
-  function groupOrders(orders) {
+  function groupOverlapOrders(orders) {
     var orders = sortOrdersBy(orders, 'packingStart');
+
+    var assignedOrders = [];
     var groupedOrders = [];
-    var overlap = false;
 
     for (var i = 0; i < orders.length; i++) {
-
-      if (overlap) {
-        groupedOrders[groupedOrders.length - 1].push(orders[i]);
-        overlap = false;
-      } else {
+      // add order to new group if unassigned
+      if (assignedOrders.indexOf(orders[i].orderId) <= -1) {
         groupedOrders.push([orders[i]]);
+        assignedOrders.push(orders[i].orderId);        
       }
 
+      // search next orders for overlaps
       for (var j = i + 1; j < orders.length; j++) {
+        // add overlap to current group if unassigned
         if (overlapExists(orders[i], orders[j])) {
-          overlap = true;
-          break;
+          if (assignedOrders.indexOf(orders[j].orderId) <= -1) {
+            var currentGroupIndex = groupedOrders.length - 1;
+            groupedOrders[currentGroupIndex].push(orders[j]);      
+            assignedOrders.push(orders[j].orderId);            
+          }
         }
       }
     }
+    console.log(groupedOrders);
     return groupedOrders;
   }
 
   // add canvas properties to orders
   function addCanvasData(orders) {
-    var groupedOrders = groupOrders(orders);
+    var groupedOrders = groupOverlapOrders(orders);
     var maxWidth = 800;
     var ordersCanvas = [];
 
@@ -60,7 +65,7 @@ var OrderProcessing = (function () {
       for (var j = 0; j < ordersGroup.length; j++) {
         var order = ordersGroup[j];
 
-        order.height = order.duration;
+        order.height = order.duration; // redundant property but sugar
         order.width = width;
         order.left = width * j;
         ordersCanvas.push(order);
@@ -74,17 +79,18 @@ var OrderProcessing = (function () {
   };
 })();
 
-var json = '[\
-  {"orderId": 0, "packingStart": 60, "duration": 29},\
-  {"orderId": 1, "packingStart": 510, "duration": 47},\
-  {"orderId": 2, "packingStart": 270, "duration": 128},\
-  {"orderId": 3, "packingStart": 320, "duration": 22},\
-  {"orderId": 4, "packingStart": 80, "duration": 53},\
-  {"orderId": 5, "packingStart": 401, "duration": 33},\
-  {"orderId": 6, "packingStart": 220, "duration": 44}\
-]';
+// var json = '[\
+//   {"orderId": 1, "packingStart": 0, "duration": 160},\
+//   {"orderId": 2, "packingStart": 510, "duration": 90},\
+//   {"orderId": 3, "packingStart": 270, "duration": 128},\
+//   {"orderId": 4, "packingStart": 320, "duration": 22},\
+//   {"orderId": 5, "packingStart": 80, "duration": 53},\
+//   {"orderId": 6, "packingStart": 371, "duration": 33},\
+//   {"orderId": 7, "packingStart": 220, "duration": 44}\
+// ]';
 
-var orders = JSON.parse(json);
-var ordersCanvas = OrderProcessing.process(orders);
-console.log(ordersCanvas);
+// var orders = JSON.parse(json);
+
+// // process adds width, left and height
+// var ordersCanvas = OrderProcessing.process(orders);
 
