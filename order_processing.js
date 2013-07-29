@@ -78,19 +78,3 @@ var OrderProcessing = (function () {
     process: addCanvasData
   };
 })();
-
-// var json = '[\
-//   {"orderId": 1, "packingStart": 0, "duration": 160},\
-//   {"orderId": 2, "packingStart": 510, "duration": 90},\
-//   {"orderId": 3, "packingStart": 270, "duration": 128},\
-//   {"orderId": 4, "packingStart": 320, "duration": 22},\
-//   {"orderId": 5, "packingStart": 80, "duration": 53},\
-//   {"orderId": 6, "packingStart": 371, "duration": 33},\
-//   {"orderId": 7, "packingStart": 220, "duration": 44}\
-// ]';
-
-// var orders = JSON.parse(json);
-
-// // process adds width, left and height
-// var ordersCanvas = OrderProcessing.process(orders);
-

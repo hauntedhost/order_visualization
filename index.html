@@ -2,6 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <!--
+          _.-"\
+      _.-"     \
+   ,-"          \
+  ( \            \
+   \ \            \
+    \ \            \
+     \ \         _.-;
+      \ \    _.-"   :
+       \ \,-"    _.-"
+        \(   _.-"  read books
+         `.-"
+  -->
   <title>Order processing visualization</title>
 
   <link type="text/css" rel="stylesheet" href="style.css" />
@@ -49,7 +62,7 @@ $(function () {
     ctx.font = '14px Arial';
  
     var yCoord = i * 60;
-    yCoord = ((yCoord == 0) ? 10 : yCoord); // offset for 0:00
+    yCoord = ((yCoord == 0) ? 10 : yCoord); // slight visual offset for 0:00
 
     ctx.fillText(i + ':00', 0, yCoord);
   }
@@ -67,15 +80,10 @@ $(function () {
     ctx.strokeStyle = '#009e08';
     ctx.strokeRect(order.left + 1, order.packingStart + 1, order.width - 2, order.height - 2);
 
-    // left and right border
-    // ctx.strokeRect(order.left, order.packingStart, 1, order.height);
-    // ctx.strokeRect(order.left + order.width - 1, order.packingStart, 1, order.height);    
-
     // order number
     ctx.fillStyle = 'black';
     ctx.font = '14px Arial';
     ctx.fillText('#' + order.orderId, order.left + 5, order.packingStart + 15);
-
   }
 });
 </script>
